@@ -35,42 +35,48 @@ function Register({ setVista }) {
   };
 
   return (
-    <div
-      className="container"
-      style={{
-        backgroundImage: `url(${fondo})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <div className="card">
-        <img src={logo} alt="logo" className="logo" />
+    <div className="container">
 
-        <h2>Registrarse</h2>
+      {/* IZQUIERDA */}
+      <div className="left">
+        <div className="card">
 
-        <input
-          placeholder="Correo electrónico"
-          onChange={(e) => setCorreo(e.target.value)}
-        />
+          <img src={logo} alt="logo" className="logo" />
 
-        <input
-          type="password"
-          placeholder="Contraseña"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <h2>Registrarse</h2>
 
-        <input
-          type="password"
-          placeholder="Confirmar contraseña"
-          onChange={(e) => setConfirmar(e.target.value)}
-        />
+          <input
+            placeholder="Correo electrónico"
+            onChange={(e) => setCorreo(e.target.value)}
+          />
 
-        <button onClick={handleRegister}>Registrarse</button>
+          <input
+            type="password"
+            placeholder="Contraseña"
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <p className="switch" onClick={() => setVista("login")}>
-          ¿Ya tienes cuenta? Inicia sesión
-        </p>
+          <input
+            type="password"
+            placeholder="Confirmar contraseña"
+            onChange={(e) => setConfirmar(e.target.value)}
+          />
+
+          <button onClick={handleRegister}>Registrarse</button>
+
+          <p className="switch" onClick={() => setVista("login")}>
+            ¿Ya tienes cuenta? Inicia sesión
+          </p>
+
+        </div>
       </div>
+
+      {/* DERECHA */}
+      <div
+        className="right"
+        style={{ backgroundImage: `url(${fondo})` }}
+      ></div>
+
     </div>
   );
 }

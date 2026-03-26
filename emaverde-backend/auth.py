@@ -8,7 +8,7 @@ def registrar_usuario(correo, password):
     conn = get_connection()
     cur = conn.cursor()
 
-    # Encriptar mi contraseña AAAAA
+    # 🔐 Encriptar contraseña
     hashed = pwd_context.hash(password)
 
     cur.execute("""
@@ -26,7 +26,9 @@ def login_usuario(correo, password):
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT password FROM usuarios WHERE correo=%s
+        SELECT correo, password, id_rol
+        FROM usuarios 
+        WHERE correo=%s
     """, (correo,))
 
     user = cur.fetchone()
@@ -34,7 +36,13 @@ def login_usuario(correo, password):
     cur.close()
     conn.close()
 
-    if user and pwd_context.verify(password, user[0]):
-        return {"msg": "Login exitoso"}
-    else:
-        return {"error": "Credenciales incorrectas"}
+    if not user:
+        return None
+
+    if not pwd_context.verify(password, user[1]):
+        return None
+
+    return {
+        "correo": user[0],
+        "rol": user[2]
+    }

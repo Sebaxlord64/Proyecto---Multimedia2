@@ -3,24 +3,38 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* CONTENEDOR */
+/* CONTENEDOR GENERAL */
 .container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+/* LADO IZQUIERDO */
+.left {
+  width: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 
-  /* 🔥 mejora visual */
-  padding: 20px;
+  /* color */
+  background: linear-gradient(135deg, #00172c, #218838);
+}
+
+/* LADO DERECHO (IMAGEN) */
+.right {
+  width: 50%;
+  background-size: cover;
+  background-position: center;
 }
 
 /* CARD */
 .card {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(12px);
-  padding: 40px 30px; /* 🔥 más espacio vertical */
+  padding: 40px 30px;
   border-radius: 18px;
-  width: 340px; /* un poco más ancho */
+  width: 340px;
   box-shadow: 0 15px 40px rgba(0,0,0,0.6);
   text-align: center;
   color: white;
@@ -36,11 +50,11 @@ body {
 input {
   width: 100%;
   padding: 12px;
-  margin: 12px 0; /* 🔥 mejor separación */
+  margin: 12px 0;
   border: none;
   border-radius: 8px;
   outline: none;
-  box-sizing: border-box; /* 🔥 evita desalineación */
+  box-sizing: border-box;
 }
 
 /* BOTÓN */
@@ -59,13 +73,13 @@ button {
 
 button:hover {
   background: #218838;
-  transform: scale(1.02); /* 🔥 pequeño efecto */
+  transform: scale(1.02);
 }
 
 /* LINK */
 .switch {
   margin-top: 18px;
-  color: #cfd8dc; /* 🔥 gris claro elegante */
+  color: #cfd8dc;
   cursor: pointer;
   font-size: 14px;
   transition: 0.3s;

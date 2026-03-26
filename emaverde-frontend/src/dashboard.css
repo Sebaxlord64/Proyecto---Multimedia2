@@ -1,19 +1,29 @@
-/* CONTENEDOR GENERAL */
-.dashboard {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+/* ===== GLOBAL ===== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f4f6f8;
 }
 
-/* NAVBAR */
+/* ===== DASHBOARD ===== */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ===== NAVBAR ===== */
 .navbar {
   height: 60px;
-  background: #1b7f3a;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
+  min-height: 60px;
+  max-height: 60px;
+  background: #1e7f3e;
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
 }
 
 .nav-left {
@@ -23,64 +33,290 @@
 }
 
 .nav-left img {
-  width: 40px;
+  width: 35px;
 }
 
-.nav-right button {
-  background: transparent;
-  border: 1px solid white;
-  color: white;
-  padding: 6px 10px;
+.title {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-email {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.logout-btn {
+  background: #ff5252;
+  border: none;
+  padding: 6px 12px;
   border-radius: 6px;
+  color: white;
   cursor: pointer;
 }
 
-/* MAIN */
+.logout-btn:hover {
+  background: #e53935;
+}
+
+/* ===== MAIN ===== */
 .main {
   display: flex;
   flex: 1;
 }
 
-/* SIDEBAR */
+/* ===== SIDEBAR ===== */
 .sidebar {
-  width: 250px;
-  background: #0f5c2e;
+  width: 230px;
+  background: #145c2e;
   color: white;
   padding: 20px;
 }
 
 .sidebar h3 {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  opacity: 0.8;
 }
 
 .sidebar p {
-  margin: 10px 0;
+  padding: 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.sidebar p:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.sidebar .active {
+  background: #1e7f3e;
+}
+
+/* ===== CONTENT ===== */
+.content-area {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* ===== CARD ===== */
+.card-big {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ===== HEADER (FIX ALINEACIÓN) ===== */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* ===== TABLE ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th {
+  background: #f0f2f5;
+  text-align: left;
+  padding: 10px;
+  font-size: 13px;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+}
+
+/* ===== BOTONES ===== */
+button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-/* CONTENT */
-.content {
-  flex: 1;
-  padding: 20px;
-  background: #f2f2f2;
+.btn-green {
+  background: #1e7f3e;
+  color: white;
+}
+
+.btn-green:hover {
+  background: #16622f;
+}
+
+.btn-main {
+  min-width: 260px;  
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.delete {
+  background: #e74c3c;
+  color: white;
+}
+
+.delete:hover {
+  background: #c0392b;
+}
+
+/* ===== FORM ===== */
+.form-group {
+  margin-bottom: 15px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+}
+
+/* ===== TABS ===== */
+.tabs {
   display: flex;
-  gap: 20px;
+  width: 100%;
+  margin-bottom: 15px;
 }
 
-/* CARD VERDE */
-.card-green {
-  background: #1b7f3a;
-  color: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 300px;
-}
-
-/* CARD GRANDE */
-.card-big {
+.tab {
   flex: 1;
-  background: black;
+  text-align: center;
+  padding: 12px 0;
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+  color: #333;
+}
+
+/* Bordes */
+.tab:first-child {
+  border-top-left-radius: 8px;
+}
+
+.tab:last-child {
+  border-top-right-radius: 8px;
+}
+
+/* Hover */
+.tab:hover {
+  background: #e0e0e0;
+}
+
+/* ACTIVO (GRIS SUAVE, NO NEGRO) */
+.active-tab {
+  background: #4b4b4b; /* gris elegante */
   color: white;
-  border-radius: 10px;
-  padding: 20px;
+  font-weight: bold;
+}
+/* ===== BOTONES ACCIONES UNIFICADOS ===== */
+
+/* Contenedor acciones */
+td button {
+  margin: 3px 0;
+  display: block;
+  width: 100px;        /* 🔥 MISMO ANCHO */
+  text-align: center;
+  font-weight: bold;
+}
+
+/* EDITAR (AMARILLO SUAVE) */
+.edit {
+  background: #f4b400;
+  color: white;
+}
+
+.edit:hover {
+  background: #d89c00;
+}
+
+/* ELIMINAR */
+.delete {
+  background: #e74c3c;
+  color: white;
+}
+
+.delete:hover {
+  background: #c0392b;
+}
+
+/* BOTÓN REVISAR (CELESTE SUAVE) */
+.btn-info {
+  background: #4fc3f7;
+  color: white;
+}
+
+.btn-info:hover {
+  background: #29b6f6;
+}
+/* 🔥 CENTRAR Y EMPUJAR ACCIONES A LA DERECHA */
+td:last-child {
+  text-align: right;
+}
+
+/* Botones dentro de acciones */
+td:last-child button {
+  display: inline-block;
+  margin-left: 5px;
+}
+/* TEXTO GENERAL MÁS GRANDE */
+th {
+  font-size: 14px;
+}
+
+td {
+  font-size: 14px;
+}
+
+h2 {
+  font-size: 20px;
+}
+/* ===== BADGES DE ESTADO ===== */
+
+.badge {
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: capitalize;
+  display: inline-block;
+}
+
+/* 🟤 PENDIENTE (PLOMO) */
+.badge-pendiente {
+  background: #e0e0e0;
+  color: #616161;
+}
+
+/* 🔵 APROBADO (CELESTE CYAN) */
+.badge-aprobado {
+  background: #4fc3f7;
+  color: white;
+}
+
+/* 🔴 RECHAZADO */
+.badge-rechazado {
+  background: #e74c3c;
+  color: white;
 }
