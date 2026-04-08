@@ -42,7 +42,7 @@ function AdminUbicaciones({ setModo, setUbicacionEdit }) {
             <th>Calle</th>
             <th>Imagen</th>
             <th style={{ textAlign: "right", paddingRight: "25px" }}>
-              Acciones
+            Editar &nbsp;&nbsp; Eliminar
             </th>
           </tr>
         </thead>

@@ -320,3 +320,75 @@ h2 {
   background: #e74c3c;
   color: white;
 }
+
+.nav-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+}
+.acciones-header {
+  display: flex;
+  justify-content: flex-end;
+  gap: 30px; 
+  width: 180px; 
+}
+
+.acciones-header span {
+  width: 70px;
+  text-align: center;
+  font-weight: 700 !important;
+  font-size: 15px;
+}
+/* ===== ICONOS ===== */
+.material-icons {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+
+/* NAVBAR ITEMS */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: white;
+}
+
+/* BOTON LOGOUT */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* SIDEBAR ITEMS */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+/* HOVER */
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ACTIVO */
+.menu-item.active {
+  background-color: #2e7d32;
+}
+/* TABS CON ICONOS */
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* ICONOS EN TABS */
+.tab .material-icons {
+  font-size: 18px;
+}

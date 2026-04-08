@@ -25,7 +25,7 @@ def obtener_horarios():
     cursor.execute("""
         SELECT 
             h.id,
-            h.espacio_id,   -- 🔥 IMPORTANTE
+            h.espacio_id,   -- IMPORTANTE
             e.nombre,
             h.dia,
             h.hora_inicio,

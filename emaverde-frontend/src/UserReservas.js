@@ -53,6 +53,7 @@ function UserReservas({ user }) {
       .then(setReservas);
   };
 
+  // 🔥 FILTRAR HORARIOS DISPONIBLES
   const horariosFiltrados = horarios.filter(h => {
 
     if (!form.fecha || !form.espacio_id) return false;
@@ -64,6 +65,36 @@ function UserReservas({ user }) {
            diaHorario === diaFecha;
   });
 
+  // 🚫 DETECTAR FECHA PASADA
+  const esFechaPasada = () => {
+    if (!form.fecha) return false;
+
+    const hoy = new Date();
+    const fechaSeleccionada = new Date(form.fecha);
+
+    hoy.setHours(0,0,0,0);
+
+    return fechaSeleccionada < hoy;
+  };
+
+  // 🚫 DETECTAR CONFLICTO
+  const hayConflicto = () => {
+    if (!form.fecha || !form.horario_id) return false;
+
+    const horarioSeleccionado = horarios.find(
+      h => String(h[0]) === String(form.horario_id)
+    );
+
+    if (!horarioSeleccionado) return false;
+
+    return reservas.some(r =>
+      String(r[5]) === String(form.fecha) && // misma fecha
+      String(r[3]) === String(horarioSeleccionado[4]) && // hora inicio
+      String(r[4]) === String(horarioSeleccionado[5])    // hora fin
+    );
+  };
+
+  // 💾 GUARDAR
   const guardar = async () => {
 
     if (!form.fecha || !form.espacio_id || !form.horario_id) {
@@ -71,7 +102,12 @@ function UserReservas({ user }) {
       return;
     }
 
-    await fetch("http://127.0.0.1:8000/reservas", {
+    // 🚫 BLOQUEOS (sin alert visual)
+    if (esFechaPasada() || hayConflicto()) {
+      return;
+    }
+
+    const res = await fetch("http://127.0.0.1:8000/reservas", {
       method: "POST",
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({
@@ -79,6 +115,13 @@ function UserReservas({ user }) {
         usuario_correo: user.correo
       })
     });
+
+    const data = await res.json();
+
+    if (data.error) {
+      alert(data.error); // backend (seguridad)
+      return;
+    }
 
     setVista("lista");
     setForm({ espacio_id:"", horario_id:"", fecha:"" });
@@ -114,9 +157,9 @@ function UserReservas({ user }) {
               <th>Fecha</th>
               <th>Estado</th>
               <th>Motivo</th>
-            <th style={{ textAlign: "right", paddingRight: "25px" }}>
-            Acciones
-            </th>
+              <th style={{ textAlign: "right", paddingRight: "25px" }}>
+                Acciones
+              </th>
             </tr>
           </thead>
 
@@ -127,7 +170,6 @@ function UserReservas({ user }) {
                 <td>{r[2]} {r[3]}-{r[4]}</td>
                 <td>{r[5]}</td>
 
-                {/* ESTADO CON COLOR */}
                 <td>
                   <span className={
                     r[6] === "pendiente"
@@ -156,7 +198,7 @@ function UserReservas({ user }) {
     );
   }
 
-  // CREAR
+  // ================= CREAR =================
   return (
     <div className="card-big">
 
@@ -170,6 +212,13 @@ function UserReservas({ user }) {
             setForm({...form, fecha:e.target.value, horario_id:""})
           }
         />
+
+        {/* 🚫 MENSAJE FECHA PASADA */}
+        {esFechaPasada() && (
+          <p style={{ color: "red", marginTop: "5px" }}>
+            ⚠️ No puedes seleccionar una fecha anterior a hoy
+          </p>
+        )}
       </div>
 
       <div className="form-group">
@@ -211,9 +260,20 @@ function UserReservas({ user }) {
             </option>
           ))}
         </select>
+
+        {/* 🚫 MENSAJE CONFLICTO */}
+        {hayConflicto() && (
+          <p style={{ color: "red", marginTop: "5px" }}>
+            ⚠️ Este horario ya está reservado para esa fecha
+          </p>
+        )}
       </div>
 
-      <button className="btn-add" onClick={guardar}>
+      <button 
+        className="btn-add" 
+        onClick={guardar}
+        disabled={hayConflicto() || esFechaPasada()}
+      >
         Guardar
       </button>
 

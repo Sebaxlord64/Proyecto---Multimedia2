@@ -47,7 +47,7 @@ function AdminEspacios({ setModo, setEspacioEdit }) {
             <th>Salidas Emergencia</th>
             <th>Vestuarios</th>
             <th style={{ textAlign: "right", paddingRight: "25px" }}>
-              Acciones
+            Editar &nbsp;&nbsp; Eliminar
             </th>
           </tr>
         </thead>

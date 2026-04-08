@@ -42,7 +42,7 @@ function AdminHorarios({ setModo, setHorarioEdit }) {
             <th>Inicio</th>
             <th>Fin</th>
             <th style={{ textAlign: "right", paddingRight: "25px" }}>
-            Acciones
+            Editar &nbsp;&nbsp; Eliminar
             </th>
           </tr>
         </thead>

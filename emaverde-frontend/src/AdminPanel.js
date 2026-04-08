@@ -36,21 +36,24 @@ function AdminPanel() {
           className={tab === "espacios" ? "tab active-tab" : "tab"}
           onClick={() => { setTab("espacios"); reset(); }}
         >
-          Espacios
+          <span className="material-icons">sports_soccer</span>
+          <span>Espacios</span>
         </button>
 
         <button
           className={tab === "horarios" ? "tab active-tab" : "tab"}
           onClick={() => { setTab("horarios"); reset(); }}
         >
-          Horarios
+          <span className="material-icons">schedule</span>
+          <span>Horarios</span>
         </button>
 
         <button
           className={tab === "ubicaciones" ? "tab active-tab" : "tab"}
           onClick={() => { setTab("ubicaciones"); reset(); }}
         >
-          Ubicaciones
+          <span className="material-icons">place</span>
+          <span>Ubicaciones</span>
         </button>
 
       </div>

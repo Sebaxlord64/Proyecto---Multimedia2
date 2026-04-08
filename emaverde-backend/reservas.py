@@ -1,10 +1,39 @@
 from database import get_connection
+from datetime import date
 
 # CREAR
 def crear_reserva(data):
     conn = get_connection()
     cur = conn.cursor()
 
+    # 🚫 VALIDAR FECHA PASADA
+    fecha_reserva = date.fromisoformat(data["fecha"])
+    hoy = date.today()
+
+    if fecha_reserva < hoy:
+        conn.close()
+        return {"error": "No puedes reservar en fechas pasadas"}
+
+    # 🚫 VALIDAR DUPLICADO
+    cur.execute("""
+        SELECT id FROM reservas
+        WHERE espacio_id=%s
+        AND horario_id=%s
+        AND fecha=%s
+        AND estado IN ('pendiente','aprobado')
+    """, (
+        data["espacio_id"],
+        data["horario_id"],
+        data["fecha"]
+    ))
+
+    existe = cur.fetchone()
+
+    if existe:
+        conn.close()
+        return {"error": "Este horario ya está reservado"}
+
+    # ✅ INSERTAR
     cur.execute("""
         INSERT INTO reservas 
         (usuario_correo, espacio_id, horario_id, fecha, estado)
@@ -18,6 +47,8 @@ def crear_reserva(data):
 
     conn.commit()
     conn.close()
+
+    return {"ok": True}
 
 
 # TODAS
@@ -101,7 +132,7 @@ def actualizar_reserva(id, estado, motivo=None):
     conn.close()
 
 
-# 🔹 ELIMINAR
+# ELIMINAR
 def eliminar_reserva(id):
     conn = get_connection()
     cur = conn.cursor()

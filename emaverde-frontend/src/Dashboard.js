@@ -19,11 +19,15 @@ function Dashboard({ setVista, user }) {
 
         <div className="nav-left">
           <img src={logo} alt="logo" />
-          <span className="title">Sistema Ema Verde</span>
+          <span className="nav-title">Sistema EmaVerde</span>
         </div>
 
         <div className="nav-right">
-          <span className="user-email">{user?.correo}</span>
+
+          <div className="nav-item">
+            <span className="material-icons">account_circle</span>
+            <span>{user?.correo}</span>
+          </div>
 
           <button
             className="logout-btn"
@@ -32,8 +36,10 @@ function Dashboard({ setVista, user }) {
               setVista("login");
             }}
           >
-            Cerrar sesión
+            <span className="material-icons">logout</span>
+            <span>Cerrar sesión</span>
           </button>
+
         </div>
 
       </div>
@@ -46,33 +52,37 @@ function Dashboard({ setVista, user }) {
 
           <h3>NAVEGACIÓN</h3>
 
-          <p
-            className={vistaInterna === "admin" ? "active" : ""}
+          <div
+            className={`menu-item ${vistaInterna === "admin" ? "active" : ""}`}
             onClick={() => setVistaInterna("admin")}
           >
-            Admin. canchas
-          </p>
+            <span className="material-icons">sports_soccer</span>
+            <span>Admin. canchas</span>
+          </div>
 
-          <p
-            className={vistaInterna === "reservas" ? "active" : ""}
+          <div
+            className={`menu-item ${vistaInterna === "reservas" ? "active" : ""}`}
             onClick={() => setVistaInterna("reservas")}
           >
-            Mis reservas
-          </p>
+            <span className="material-icons">event</span>
+            <span>Mis reservas</span>
+          </div>
 
-          <p
-            className={vistaInterna === "pendientes" ? "active" : ""}
+          <div
+            className={`menu-item ${vistaInterna === "pendientes" ? "active" : ""}`}
             onClick={() => setVistaInterna("pendientes")}
           >
-            Reservas pendientes
-          </p>
+            <span className="material-icons">schedule</span>
+            <span>Reservas pendientes</span>
+          </div>
 
-          <p
-            className={vistaInterna === "historial" ? "active" : ""}
+          <div
+            className={`menu-item ${vistaInterna === "historial" ? "active" : ""}`}
             onClick={() => setVistaInterna("historial")}
           >
-            Historial
-          </p>
+            <span className="material-icons">history</span>
+            <span>Historial</span>
+          </div>
 
         </div>
 
