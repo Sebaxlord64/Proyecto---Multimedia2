@@ -23,14 +23,20 @@ function AdminHorarios({ setModo, setHorarioEdit }) {
   return (
     <div className="card-big">
 
+      {/* 🔥 HEADER MEJORADO */}
       <div className="card-header">
-        <h2>Lista de Horarios</h2>
+        <div>
+          <h2>Horarios</h2>
+          <p style={{ fontSize: "12px", color: "#777" }}>
+            Configura los horarios disponibles
+          </p>
+        </div>
 
         <button 
           className="btn-green btn-main"
           onClick={() => setModo("crearHorario")}
         >
-          + Agregar Horario
+          + Agregar
         </button>
       </div>
 
@@ -42,7 +48,7 @@ function AdminHorarios({ setModo, setHorarioEdit }) {
             <th>Inicio</th>
             <th>Fin</th>
             <th style={{ textAlign: "right", paddingRight: "25px" }}>
-            Editar &nbsp;&nbsp; Eliminar
+              Acciones
             </th>
           </tr>
         </thead>
@@ -55,7 +61,7 @@ function AdminHorarios({ setModo, setHorarioEdit }) {
               <td>{h[4]}</td>
               <td>{h[5]}</td>
 
-              <td>
+              <td style={{ display: "flex", gap: "5px" }}>
                 <button
                   className="edit"
                   onClick={() => {

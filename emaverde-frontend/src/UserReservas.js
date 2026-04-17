@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ModelViewer from "./components/ModelViewer";
 
 function UserReservas({ user }) {
 
@@ -6,6 +7,7 @@ function UserReservas({ user }) {
   const [espacios, setEspacios] = useState([]);
   const [horarios, setHorarios] = useState([]);
   const [reservas, setReservas] = useState([]);
+  const [modeloSeleccionado, setModeloSeleccionado] = useState(null);
 
   const [form, setForm] = useState({
     espacio_id: "",
@@ -45,6 +47,7 @@ function UserReservas({ user }) {
       .then(r => r.json())
       .then(setHorarios);
 
+    // eslint-disable-next-line
   }, [user]);
 
   const cargarReservas = () => {
@@ -88,9 +91,9 @@ function UserReservas({ user }) {
     if (!horarioSeleccionado) return false;
 
     return reservas.some(r =>
-      String(r[5]) === String(form.fecha) && // misma fecha
-      String(r[3]) === String(horarioSeleccionado[4]) && // hora inicio
-      String(r[4]) === String(horarioSeleccionado[5])    // hora fin
+      String(r[5]) === String(form.fecha) &&
+      String(r[3]) === String(horarioSeleccionado[4]) &&
+      String(r[4]) === String(horarioSeleccionado[5])
     );
   };
 
@@ -102,10 +105,7 @@ function UserReservas({ user }) {
       return;
     }
 
-    // 🚫 BLOQUEOS (sin alert visual)
-    if (esFechaPasada() || hayConflicto()) {
-      return;
-    }
+    if (esFechaPasada() || hayConflicto()) return;
 
     const res = await fetch("http://127.0.0.1:8000/reservas", {
       method: "POST",
@@ -119,7 +119,7 @@ function UserReservas({ user }) {
     const data = await res.json();
 
     if (data.error) {
-      alert(data.error); // backend (seguridad)
+      alert(data.error);
       return;
     }
 
@@ -136,91 +136,106 @@ function UserReservas({ user }) {
   };
 
   // ================= LISTA =================
-  if (vista === "lista") {
-    return (
-      <div className="card-big">
-
-        <h2>Mis Reservas</h2>
-
-        <button 
-        className="btn-green btn-main"
-        onClick={() => setVista("crear")}
-        >
-        + Nueva Reserva
-        </button>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Cancha</th>
-              <th>Horario</th>
-              <th>Fecha</th>
-              <th>Estado</th>
-              <th>Motivo</th>
-              <th style={{ textAlign: "right", paddingRight: "25px" }}>
-                Acciones
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {reservas.map(r => (
-              <tr key={r[0]}>
-                <td>{r[1]}</td>
-                <td>{r[2]} {r[3]}-{r[4]}</td>
-                <td>{r[5]}</td>
-
-                <td>
-                  <span className={
-                    r[6] === "pendiente"
-                      ? "badge badge-pendiente"
-                      : r[6] === "aprobado"
-                      ? "badge badge-aprobado"
-                      : "badge badge-rechazado"
-                  }>
-                    {r[6]}
-                  </span>
-                </td>
-
-                <td>{r[7] || "-"}</td>
-
-                <td>
-                  <button className="delete" onClick={()=>eliminar(r[0])}>
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-      </div>
-    );
-  }
-
-  // ================= CREAR =================
+ if (vista === "lista") {
   return (
     <div className="card-big">
 
-      <h2>Nueva Reserva</h2>
+      {/* 🔥 HEADER PRO */}
+      <div className="card-header">
+        <div>
+          <h2>Mis Reservas</h2>
+          <p style={{ fontSize: "12px", color: "#777" }}>
+            Gestiona y revisa tus reservas
+          </p>
+        </div>
 
+        <button 
+          className="btn-green btn-main"
+          onClick={() => setVista("crear")}
+        >
+          + Nueva Reserva
+        </button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Cancha</th>
+            <th>Horario</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Motivo</th>
+            <th style={{ textAlign: "right", paddingRight: "25px" }}>
+              Acciones
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {reservas.map(r => (
+            <tr key={r[0]}>
+              <td>{r[1]}</td>
+              <td>{r[2]} {r[3]}-{r[4]}</td>
+              <td>{r[5]}</td>
+
+              <td>
+                <span className={
+                  r[6] === "pendiente"
+                    ? "badge badge-pendiente"
+                    : r[6] === "aprobado"
+                    ? "badge badge-aprobado"
+                    : "badge badge-rechazado"
+                }>
+                  {r[6]}
+                </span>
+              </td>
+
+              <td>{r[7] || "-"}</td>
+
+              <td style={{ textAlign: "right" }}>
+                <button 
+                  className="delete"
+                  onClick={()=>eliminar(r[0])}
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+    </div>
+  );
+}
+
+  // ================= CREAR =================
+return (
+  <div className="card-big form-container">
+
+    <h2>Nueva Reserva</h2>
+
+    <div className="form-grid">
+
+      {/* FECHA */}
       <div className="form-group">
         <label>Fecha</label>
-        <input type="date"
+        <input
+          type="date"
           value={form.fecha}
           onChange={e =>
             setForm({...form, fecha:e.target.value, horario_id:""})
           }
         />
 
-        {/* 🚫 MENSAJE FECHA PASADA */}
         {esFechaPasada() && (
-          <p style={{ color: "red", marginTop: "5px" }}>
-            ⚠️ No puedes seleccionar una fecha anterior a hoy
+          <p style={{ color: "red", fontSize: "12px" }}>
+            ⚠ Fecha inválida
           </p>
         )}
       </div>
 
+      {/* CANCHA */}
       <div className="form-group">
         <label>Cancha</label>
         <select
@@ -229,15 +244,32 @@ function UserReservas({ user }) {
             setForm({...form, espacio_id:e.target.value, horario_id:""})
           }
         >
-          <option value="">Seleccionar cancha</option>
+          <option value="">Seleccionar</option>
           {espacios.map(e => (
             <option key={e[0]} value={e[0]}>
               {e[1]}
             </option>
           ))}
         </select>
+
+        {form.espacio_id && (
+          <button
+            type="button"
+            onClick={() => {
+              const espacio = espacios.find(
+                e => String(e[0]) === String(form.espacio_id)
+              );
+              setModeloSeleccionado(espacio[10]);
+            }}
+            className="btn-green"
+            style={{ marginTop: "5px", fontSize: "12px" }}
+          >
+            Ver 3D
+          </button>
+        )}
       </div>
 
+      {/* HORARIO */}
       <div className="form-group">
         <label>Horario</label>
 
@@ -248,10 +280,10 @@ function UserReservas({ user }) {
           }
           disabled={!form.espacio_id || !form.fecha}
         >
-          <option value="">Seleccionar horario</option>
+          <option value="">Seleccionar</option>
 
           {horariosFiltrados.length === 0 && (
-            <option disabled>No hay horarios para ese día</option>
+            <option disabled>No disponible</option>
           )}
 
           {horariosFiltrados.map(h => (
@@ -261,28 +293,53 @@ function UserReservas({ user }) {
           ))}
         </select>
 
-        {/* 🚫 MENSAJE CONFLICTO */}
         {hayConflicto() && (
-          <p style={{ color: "red", marginTop: "5px" }}>
-            ⚠️ Este horario ya está reservado para esa fecha
+          <p style={{ color: "red", fontSize: "12px" }}>
+            ⚠ Ya reservado
           </p>
         )}
       </div>
 
+    </div>
+
+    {/* BOTONES */}
+    <div className="form-actions">
       <button 
-        className="btn-add" 
+        className="btn-green"
         onClick={guardar}
         disabled={hayConflicto() || esFechaPasada()}
       >
         Guardar
       </button>
 
-      <button className="btn-gray" onClick={() => setVista("lista")}>
+      <button 
+        className="btn-gray"
+        onClick={() => setVista("lista")}
+      >
         Cancelar
       </button>
-
     </div>
-  );
+
+    {/* MODAL 3D */}
+    {modeloSeleccionado && (
+      <div className="modal">
+        <div className="modal-content">
+          <h3>Vista 3D</h3>
+
+          <ModelViewer modelo={modeloSeleccionado} />
+
+          <button 
+            onClick={() => setModeloSeleccionado(null)}
+            className="btn-red"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    )}
+
+  </div>
+);
 }
 
 export default UserReservas;

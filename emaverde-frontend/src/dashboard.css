@@ -111,7 +111,7 @@ body {
 /* ===== CARD ===== */
 .card-big {
   background: white;
-  padding: 20px;
+  padding: 30px 35px; /* 🔥 más aire horizontal */
   border-radius: 12px;
   box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
 }
@@ -162,11 +162,10 @@ button {
 }
 
 .btn-main {
-  min-width: 260px;  
-  padding: 10px 0;
-  font-size: 14px;
+  width: auto;
+  padding: 10px 16px;
+  border-radius: 8px;
   font-weight: 600;
-  text-align: center;
 }
 
 .delete {
@@ -234,11 +233,9 @@ input, select, textarea {
 
 /* Contenedor acciones */
 td button {
-  margin: 3px 0;
-  display: block;
-  width: 100px;        /* 🔥 MISMO ANCHO */
-  text-align: center;
-  font-weight: bold;
+  display: inline-block;
+  margin-left: 5px;
+  padding: 5px 10px;
 }
 
 /* EDITAR (AMARILLO SUAVE) */
@@ -270,7 +267,7 @@ td button {
 .btn-info:hover {
   background: #29b6f6;
 }
-/* 🔥 CENTRAR Y EMPUJAR ACCIONES A LA DERECHA */
+/* CENTRAR Y EMPUJAR ACCIONES A LA DERECHA */
 td:last-child {
   text-align: right;
 }
@@ -391,4 +388,194 @@ h2 {
 /* ICONOS EN TABS */
 .tab .material-icons {
   font-size: 18px;
+}
+/* ===== FORMULARIOS PRO ===== */
+
+.form-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 25px;  /* 🔥 separa horizontal */
+  row-gap: 18px;     /* 🔥 separa vertical */
+  margin-top: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;   /* 🔥 igual que sistema */
+  color: #333;       /* 🔥 más oscuro */
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #1e7f3e;
+  outline: none;
+  box-shadow: 0 0 5px rgba(30,127,62,0.3);
+}
+
+/* BOTONES FORM */
+.form-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ===== MODAL ===== */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  width: 70%;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  animation: fadeIn 0.2s ease;
+}
+
+/* ANIMACIÓN */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== HOVER MEJORADO ===== */
+.btn-green:hover {
+  transform: scale(1.05);
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  padding-right: 5px; /* 🔥 evita que se toquen bordes */
+}
+
+/* CONTENEDOR CARRUSEL */
+.carousel-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px;
+}
+
+/* TARJETAS */
+.card-ubicacion {
+  min-width: 520px;
+  max-width: 520px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.card-ubicacion:hover {
+  transform: translateY(-5px);
+}
+
+/* IMAGEN */
+.card-ubicacion img {
+  width: 100%;
+  height: 270px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.card-ubicacion:hover img {
+  transform: scale(1.08);
+}
+
+/* CONTENIDO */
+.card-body {
+  padding: 12px;
+}
+
+.card-body h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.card-body p {
+  font-size: 13px;
+  color: #555;
+  margin: 2px 0;
+}
+
+/* BOTONES */
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-top: 10px;
+}
+/* ===== MEJORA DE DESCRIPCIONES ===== */
+
+/* Texto debajo de títulos (ej: "Gestiona las canchas...") */
+.card-big p {
+  font-size: 15px;     /* antes 13px */
+  color: #444;         /* más visible */
+  margin-top: 4px;
+}
+
+/* Títulos dentro de cards */
+.card-big h2 {
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+/* Texto dentro del carrusel */
+.card-body p {
+  font-size: 15px;     /* antes 13px */
+  color: #444;
+}
+
+/* Títulos del carrusel */
+.card-body h3 {
+  font-size: 18px;
+}
+
+/* Asegurar misma fuente en todo */
+* {
+  font-family: inherit;
+}
+/* ===== FORZAR DESCRIPCIONES ===== */
+.card-header p,
+.card-big p,
+.content-area p {
+  font-size: 16px !important;  /* 🔥 más grande de verdad */
+  color: #333 !important;
+  font-weight: 400;
 }

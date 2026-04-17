@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import ModelViewer from "./components/ModelViewer";
 
 function AdminEspacios({ setModo, setEspacioEdit }) {
   const [data, setData] = useState([]);
+  const [modeloSeleccionado, setModeloSeleccionado] = useState(null);
 
   const cargar = async () => {
     const res = await fetch("http://127.0.0.1:8000/espacios");
@@ -23,14 +25,20 @@ function AdminEspacios({ setModo, setEspacioEdit }) {
   return (
     <div className="card-big">
 
+      {/* 🔥 HEADER MEJORADO */}
       <div className="card-header">
-        <h2>Lista de Espacios</h2>
+        <div>
+          <h2>Espacios</h2>
+          <p style={{ fontSize: "12px", color: "#777" }}>
+            Gestiona las canchas del sistema
+          </p>
+        </div>
 
         <button 
           onClick={() => setModo("crear")} 
           className="btn-green btn-main"
         >
-          + Agregar Espacio
+          + Agregar
         </button>
       </div>
 
@@ -44,10 +52,10 @@ function AdminEspacios({ setModo, setEspacioEdit }) {
             <th>Tipo Suelo</th>
             <th>Área</th>
             <th>Espectadores</th>
-            <th>Salidas Emergencia</th>
+            <th>Salidas</th>
             <th>Vestuarios</th>
             <th style={{ textAlign: "right", paddingRight: "25px" }}>
-            Editar &nbsp;&nbsp; Eliminar
+              Acciones
             </th>
           </tr>
         </thead>
@@ -65,7 +73,8 @@ function AdminEspacios({ setModo, setEspacioEdit }) {
               <td>{e[8]}</td>
               <td>{e[9]}</td>
 
-              <td>
+              <td style={{ display: "flex", gap: "5px" }}>
+                
                 <button
                   className="edit"
                   onClick={() => {
@@ -82,11 +91,37 @@ function AdminEspacios({ setModo, setEspacioEdit }) {
                 >
                   🗑
                 </button>
+
+                <button
+                  className="btn-green"
+                  onClick={() => setModeloSeleccionado(e[10])}
+                >
+                  3D
+                </button>
+
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {/* MODAL 3D */}
+      {modeloSeleccionado && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Vista 3D del Espacio</h3>
+
+            <ModelViewer modelo={modeloSeleccionado} />
+
+            <button 
+              onClick={() => setModeloSeleccionado(null)}
+              className="btn-red"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
   );

@@ -50,7 +50,6 @@ function Login({ setVista, setUser }) {
   return (
     <div className="container">
 
-      {/* IZQUIERDA */}
       <div
         className="left"
         style={{ backgroundImage: `url(${fondo})` }}
@@ -66,7 +65,6 @@ function Login({ setVista, setUser }) {
         </div>
       </div>
 
-      {/* DERECHA */}
       <div className="right">
 
         <div className="form-container">

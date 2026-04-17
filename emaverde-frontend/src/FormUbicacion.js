@@ -19,7 +19,7 @@ function FormUbicacion({ setModo, ubicacionEdit }) {
     if (ubicacionEdit) {
       setForm({
         espacio_id: ubicacionEdit[1],
-        espacio_nombre: ubicacionEdit[2], // 🔥 nombre
+        espacio_nombre: ubicacionEdit[2],
         zona: ubicacionEdit[3],
         calle: ubicacionEdit[4],
         imagen: ubicacionEdit[5],
@@ -49,43 +49,60 @@ function FormUbicacion({ setModo, ubicacionEdit }) {
 
   return (
     <div className="card-big form-container">
+
       <h2>{ubicacionEdit ? "Editar Ubicación" : "Agregar Ubicación"}</h2>
 
-      <div className="form-group">
-        <label>Espacio</label>
+      {/* 🔥 GRID */}
+      <div className="form-grid">
 
-        {ubicacionEdit ? (
-          <input value={form.espacio_nombre} disabled />
-        ) : (
-          <select name="espacio_id" value={form.espacio_id} onChange={handleChange}>
-            <option value="">Seleccionar espacio</option>
-            {espacios.map(e => (
-              <option key={e[0]} value={e[0]}>{e[1]}</option>
-            ))}
-          </select>
-        )}
+        <div className="form-group">
+          <label>Espacio</label>
+
+          {ubicacionEdit ? (
+            <input value={form.espacio_nombre} disabled />
+          ) : (
+            <select
+              name="espacio_id"
+              value={form.espacio_id}
+              onChange={handleChange}
+            >
+              <option value="">Seleccionar espacio</option>
+              {espacios.map(e => (
+                <option key={e[0]} value={e[0]}>
+                  {e[1]}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label>Zona</label>
+          <input name="zona" value={form.zona} onChange={handleChange} />
+        </div>
+
+        <div className="form-group">
+          <label>Calle</label>
+          <input name="calle" value={form.calle} onChange={handleChange} />
+        </div>
+
+        <div className="form-group">
+          <label>Imagen (URL)</label>
+          <input name="imagen" value={form.imagen} onChange={handleChange} />
+        </div>
 
       </div>
 
-      <div className="form-group">
-        <label>Zona</label>
-        <input name="zona" value={form.zona} onChange={handleChange} />
-      </div>
-
-      <div className="form-group">
-        <label>Calle</label>
-        <input name="calle" value={form.calle} onChange={handleChange} />
-      </div>
-
-      <div className="form-group">
-        <label>Imagen</label>
-        <input name="imagen" value={form.imagen} onChange={handleChange} />
-      </div>
-
+      {/* BOTONES */}
       <div className="form-actions">
-        <button className="btn-green" onClick={guardar}>Guardar Cambios</button>
-        <button className="btn-gray" onClick={() => setModo("lista")}>Cancelar</button>
+        <button className="btn-green" onClick={guardar}>
+          Guardar
+        </button>
+        <button className="btn-gray" onClick={() => setModo("lista")}>
+          Cancelar
+        </button>
       </div>
+
     </div>
   );
 }

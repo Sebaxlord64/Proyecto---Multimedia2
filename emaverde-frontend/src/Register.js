@@ -40,7 +40,6 @@ function Register({ setVista }) {
   return (
     <div className="container">
 
-      {/* IZQUIERDA */}
       <div
         className="left"
         style={{ backgroundImage: `url(${fondo})` }}
@@ -56,7 +55,6 @@ function Register({ setVista }) {
         </div>
       </div>
 
-      {/* DERECHA */}
       <div className="right">
 
         <div className="form-container">

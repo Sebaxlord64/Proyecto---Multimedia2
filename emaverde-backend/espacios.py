@@ -1,5 +1,6 @@
 from database import get_connection
 
+
 def obtener_espacios():
     conn = get_connection()
     cursor = conn.cursor()
@@ -8,7 +9,8 @@ def obtener_espacios():
         SELECT 
             id, nombre, capacidad, estado, tipo_cancha, 
             tipo_suelo, area, espectadores, 
-            salidas_emergencia, vestuarios
+            salidas_emergencia, vestuarios,
+            modelo_3d
         FROM espacios
     """)
 
@@ -23,8 +25,13 @@ def crear_espacio(data):
 
     cursor.execute("""
         INSERT INTO espacios 
-        (nombre, capacidad, estado, tipo_cancha, tipo_suelo, area, espectadores, salidas_emergencia, vestuarios)
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        (
+            nombre, capacidad, estado, tipo_cancha, 
+            tipo_suelo, area, espectadores, 
+            salidas_emergencia, vestuarios,
+            modelo_3d
+        )
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
     """, (
         data["nombre"],
         data["capacidad"],
@@ -34,7 +41,8 @@ def crear_espacio(data):
         data["area"],
         data["espectadores"],
         data["salidas_emergencia"],
-        data["vestuarios"]
+        data["vestuarios"],
+        data.get("modelo_3d")  # 👈 opcional
     ))
 
     conn.commit()
@@ -55,7 +63,8 @@ def actualizar_espacio(id, data):
             area=%s,
             espectadores=%s,
             salidas_emergencia=%s,
-            vestuarios=%s
+            vestuarios=%s,
+            modelo_3d=%s
         WHERE id=%s
     """, (
         data["nombre"],
@@ -67,6 +76,7 @@ def actualizar_espacio(id, data):
         data["espectadores"],
         data["salidas_emergencia"],
         data["vestuarios"],
+        data.get("modelo_3d"),  # 👈 opcional
         id
     ))
 

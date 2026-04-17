@@ -8,7 +8,6 @@ def registrar_usuario(correo, password):
     conn = get_connection()
     cur = conn.cursor()
 
-    # 🔐 Encriptar contraseña
     hashed = pwd_context.hash(password)
 
     cur.execute("""

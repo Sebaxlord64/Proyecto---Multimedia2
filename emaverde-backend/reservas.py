@@ -6,7 +6,7 @@ def crear_reserva(data):
     conn = get_connection()
     cur = conn.cursor()
 
-    # 🚫 VALIDAR FECHA PASADA
+    # Validar que no pueda ser mas antes que hoy aaa
     fecha_reserva = date.fromisoformat(data["fecha"])
     hoy = date.today()
 
@@ -14,7 +14,7 @@ def crear_reserva(data):
         conn.close()
         return {"error": "No puedes reservar en fechas pasadas"}
 
-    # 🚫 VALIDAR DUPLICADO
+    # VALIDAR DUPLICADO
     cur.execute("""
         SELECT id FROM reservas
         WHERE espacio_id=%s
@@ -33,7 +33,7 @@ def crear_reserva(data):
         conn.close()
         return {"error": "Este horario ya está reservado"}
 
-    # ✅ INSERTAR
+    # INSERTAR
     cur.execute("""
         INSERT INTO reservas 
         (usuario_correo, espacio_id, horario_id, fecha, estado)
