@@ -42,6 +42,8 @@ def login_usuario(correo, password):
         return None
 
     return {
+    "user": {
         "correo": user[0],
         "rol": user[2]
     }
+}

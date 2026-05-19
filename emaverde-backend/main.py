@@ -81,18 +81,22 @@ def register(data: RegisterData):
 
 @app.post("/login")
 def login(data: LoginData):
-    try:
-        user = login_usuario(data.correo, data.password)
+    print("➡️ POST /login")
 
-        if not user:
-            return {"error": "Credenciales incorrectas"}
+    try:
+        result = login_usuario(data.correo, data.password)
+
+        # 🔥 AQUÍ ESTABA EL PROBLEMA
+        if not result or "error" in result:
+            return result
 
         return {
             "msg": "Login exitoso",
-            "user": user
+            "user": result["user"]
         }
 
     except Exception as e:
+        print("❌ Error en login:", e)
         return {"error": str(e)}
 
 
@@ -217,7 +221,6 @@ def delete_ubicacion(id: int):
 # RESERVAS
 # =====================================================
 
-# TODAS
 @app.get("/reservas")
 def get_reservas():
     try:
@@ -226,17 +229,17 @@ def get_reservas():
         return {"error": str(e)}
 
 
-# CREAR
 @app.post("/reservas")
 def add_reserva(data: dict):
     try:
-        crear_reserva(data)
-        return {"msg": "Reserva creada"}
+        print("➡️ POST /reservas llamado")
+        result = crear_reserva(data)
+        return result
     except Exception as e:
+        print("❌ Error:", e)
         return {"error": str(e)}
 
 
-# ACTUALIZAR (APROBAR / RECHAZAR)
 @app.put("/reservas/{id}")
 def update_reserva(id: int, data: dict):
     try:
@@ -250,7 +253,6 @@ def update_reserva(id: int, data: dict):
         return {"error": str(e)}
 
 
-# ELIMINAR (USUARIO)
 @app.delete("/reservas/{id}")
 def delete_reserva(id: int):
     try:
@@ -260,7 +262,6 @@ def delete_reserva(id: int):
         return {"error": str(e)}
 
 
-# RESERVAS POR USUARIO
 @app.get("/reservas/usuario/{correo}")
 def reservas_usuario(correo: str):
     try:
@@ -269,7 +270,6 @@ def reservas_usuario(correo: str):
         return {"error": str(e)}
 
 
-#  SOLO PENDIENTES
 @app.get("/reservas/pendientes")
 def reservas_pendientes():
     try:

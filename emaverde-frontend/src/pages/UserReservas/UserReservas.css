@@ -1,0 +1,408 @@
+.explorar-page{
+  min-height: 100vh;
+  background: #eef2f6;
+  padding: 22px;
+}
+
+/* ========================================= */
+/* PANEL PRINCIPAL */
+/* ========================================= */
+
+.explorar-container{
+  background: white;
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow:
+    0 4px 18px rgba(0,0,0,.04);
+}
+
+/* ========================================= */
+/* HEADER EXPLORAR */
+/* ========================================= */
+
+.explorar-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.explorar-header-left{
+  display: flex;
+  flex-direction: column;
+}
+
+/* SOLO MEJORAMOS LAS LETRAS */
+
+.explorar-header h1{
+  color: #0f172a;
+
+  font-size: 38px;
+
+  font-weight: 900;
+
+  letter-spacing: -1px;
+
+  line-height: 1.05;
+
+  margin: 0 0 10px 0;
+
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+
+  text-rendering: optimizeLegibility;
+}
+
+.explorar-header p{
+  color: #64748b;
+
+  font-size: 16px;
+
+  font-weight: 500;
+
+  line-height: 1.6;
+
+  margin: 0;
+
+  letter-spacing: -.2px;
+
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+}
+
+.explorar-header-right{
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-top: 10px;
+  min-width: 260px;
+}
+
+/* ========================================= */
+/* BOTON RESERVAS */
+/* ========================================= */
+
+.reservas-pendientes-btn{
+  background: #1f8b3e;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 22px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+
+  box-shadow:
+    0 8px 20px rgba(31,139,62,.18);
+
+  transition: .2s;
+}
+
+.reservas-pendientes-btn:hover{
+  background: #176d31;
+  transform: translateY(-2px);
+}
+
+/* ========================================= */
+/* FECHAS */
+/* ========================================= */
+
+.fechas-scroll{
+  display: flex;
+  gap: 14px;
+  margin-bottom: 35px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
+.fecha-chip{
+  min-width: 92px;
+  background: white;
+  border: 1px solid #dbe4ee;
+  border-radius: 24px;
+  padding: 18px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.03);
+}
+
+.fecha-chip:hover{
+  transform: translateY(-2px);
+}
+
+.fecha-chip.active{
+  background: #1f8b3e;
+  color: white;
+  border-color: #1f8b3e;
+}
+
+.fecha-dia{
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.fecha-numero{
+  font-size: 30px;
+  font-weight: 800;
+}
+
+/* ========================================= */
+/* GRID */
+/* ========================================= */
+
+.canchas-grid{
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit,minmax(340px,1fr));
+
+  gap: 28px;
+}
+
+/* ========================================= */
+/* MIS RESERVAS */
+/* ========================================= */
+
+.misreservas-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.misreservas-header h1{
+  font-size: 38px;
+
+  font-weight: 900;
+
+  color: #0f172a;
+
+  margin: 0 0 10px 0;
+
+  line-height: 1.05;
+
+  letter-spacing: -1px;
+
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+
+  text-rendering: optimizeLegibility;
+}
+
+.misreservas-header p{
+  color: #64748b;
+
+  font-size: 16px;
+
+  font-weight: 500;
+
+  line-height: 1.6;
+
+  margin: 0;
+
+  letter-spacing: -.2px;
+
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+}
+
+.volver-container{
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.volver-btn{
+  background: #1f8b3e;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+
+  width: auto !important;
+  min-width: unset !important;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  white-space: nowrap;
+
+  transition: .2s;
+}
+
+.volver-btn:hover{
+  background: #176d31;
+}
+
+/* ========================================= */
+/* RESERVAS MODERNAS */
+/* ========================================= */
+
+.reservas-cards{
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 25px;
+}
+
+/* CARD */
+
+.reserva-modern-card{
+  background: white;
+
+  border-radius: 22px;
+
+  padding: 18px 20px;
+
+  box-shadow:
+    0 8px 22px rgba(15,23,42,.05);
+
+  transition: .25s ease;
+
+  border:
+    1px solid rgba(226,232,240,.7);
+}
+
+.reserva-modern-card:hover{
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 16px 35px rgba(31,139,62,.12);
+}
+
+/* TOP */
+
+.reserva-modern-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.reserva-modern-top h2{
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.reserva-modern-top p{
+  color: #64748b;
+  font-size: 12px;
+}
+
+/* INFO */
+
+.reserva-modern-info{
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.info-item{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-label{
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #94a3b8;
+}
+
+.info-value{
+  font-size: 14px;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+/* ACTIONS */
+
+.reserva-modern-actions{
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ========================================= */
+/* ESTADOS */
+/* ========================================= */
+
+.estado{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  letter-spacing: .4px;
+}
+
+.aprobado{
+  background: #dcfce7;
+  color: #166534;
+}
+
+.pendiente{
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.rechazado{
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ========================================= */
+/* ELIMINAR */
+/* ========================================= */
+
+.eliminar-btn{
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 12px;
+
+  padding: 10px 18px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: .2s;
+}
+
+.eliminar-btn:hover{
+  background: #dc2626;
+  transform: scale(1.03);
+}
