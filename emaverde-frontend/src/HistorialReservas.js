@@ -1,11 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
-
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 function HistorialReservas() {
 
   const [data, setData] = useState([]);
+
+  // =====================================================
+  // PDF MODAL
+  // =====================================================
+
+  const [mostrarPDF, setMostrarPDF] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState("");
 
   // =====================================================
   // FILTROS FECHAS
@@ -27,7 +33,6 @@ function HistorialReservas() {
 
         if (Array.isArray(res)) {
 
-          // MÁS RECIENTE ARRIBA
           const ordenado = [...res].reverse();
 
           setData(ordenado);
@@ -53,7 +58,7 @@ function HistorialReservas() {
   }, []);
 
   // =====================================================
-  // FILTRADO POR FECHAS
+  // FILTRADO
   // =====================================================
 
   const dataFiltrada = useMemo(() => {
@@ -62,12 +67,10 @@ function HistorialReservas() {
 
       const fechaReserva = new Date(r[6]);
 
-      // SIN FILTROS
       if (!fechaInicio && !fechaFin) {
         return true;
       }
 
-      // SOLO FECHA INICIO
       if (fechaInicio && !fechaFin) {
 
         const inicio = new Date(fechaInicio);
@@ -75,7 +78,6 @@ function HistorialReservas() {
         return fechaReserva >= inicio;
       }
 
-      // SOLO FECHA FIN
       if (!fechaInicio && fechaFin) {
 
         const fin = new Date(fechaFin);
@@ -83,7 +85,6 @@ function HistorialReservas() {
         return fechaReserva <= fin;
       }
 
-      // AMBAS FECHAS
       const inicio = new Date(fechaInicio);
       const fin = new Date(fechaFin);
 
@@ -97,7 +98,7 @@ function HistorialReservas() {
   }, [data, fechaInicio, fechaFin]);
 
   // =====================================================
-  // PDF
+  // GENERAR PDF
   // =====================================================
 
   const generarPDF = () => {
@@ -123,7 +124,6 @@ function HistorialReservas() {
       30
     );
 
-    // TEXTO FILTRO
     let textoFiltro = "Filtro: Todas las fechas";
 
     if (fechaInicio && fechaFin) {
@@ -219,16 +219,34 @@ function HistorialReservas() {
 
     });
 
-    doc.save("historial_reservas.pdf");
+    const blob = doc.output("blob");
+
+    const url = URL.createObjectURL(blob);
+
+    setPdfUrl(url);
+
+    setMostrarPDF(true);
+  };
+
+  // =====================================================
+  // DESCARGAR PDF
+  // =====================================================
+
+  const descargarPDF = () => {
+
+    const link = document.createElement("a");
+
+    link.href = pdfUrl;
+
+    link.download = "historial_reservas.pdf";
+
+    link.click();
+
   };
 
   return (
 
     <div className="card-big">
-
-      {/* ===================================================== */}
-      {/* HEADER */}
-      {/* ===================================================== */}
 
       <div className="historial-header">
 
@@ -246,18 +264,12 @@ function HistorialReservas() {
           onClick={generarPDF}
           className="btn-pdf"
         >
-          Descargar PDF
+          Vista previa PDF
         </button>
 
       </div>
 
-      {/* ===================================================== */}
-      {/* FILTROS */}
-      {/* ===================================================== */}
-
       <div className="historial-filtros">
-
-        {/* FECHA INICIO */}
 
         <div className="filtro-group">
 
@@ -275,8 +287,6 @@ function HistorialReservas() {
 
         </div>
 
-        {/* FECHA FIN */}
-
         <div className="filtro-group">
 
           <label>
@@ -293,8 +303,6 @@ function HistorialReservas() {
 
         </div>
 
-        {/* BOTÓN LIMPIAR */}
-
         <button
           onClick={() => {
 
@@ -308,10 +316,6 @@ function HistorialReservas() {
         </button>
 
       </div>
-
-      {/* ===================================================== */}
-      {/* TABLA */}
-      {/* ===================================================== */}
 
       <table>
 
@@ -405,6 +409,56 @@ function HistorialReservas() {
         </tbody>
 
       </table>
+
+      {mostrarPDF && (
+
+        <div className="modal-overlay">
+
+          <div className="modal-pdf">
+
+            <div className="modal-header">
+
+              <h3>Vista previa PDF</h3>
+
+            </div>
+
+            <iframe
+              src={pdfUrl}
+              title="Vista previa PDF"
+              className="pdf-viewer"
+            />
+
+            <div className="modal-footer">
+
+              <button
+                className="btn-pdf"
+                onClick={descargarPDF}
+              >
+                Descargar
+              </button>
+
+              <button
+                className="btn-cerrar"
+                onClick={() => {
+
+                  setMostrarPDF(false);
+
+                  URL.revokeObjectURL(pdfUrl);
+
+                  setPdfUrl("");
+
+                }}
+              >
+                Cerrar
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
 
     </div>
 

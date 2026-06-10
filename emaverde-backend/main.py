@@ -37,6 +37,7 @@ from reservas import (
     eliminar_reserva
 )
 
+from pagos import simular_pago
 # =====================================================
 # APP
 # =====================================================
@@ -276,3 +277,24 @@ def reservas_pendientes():
         return obtener_pendientes()
     except Exception as e:
         return {"error": str(e)}
+
+# =====================================================
+# PAGOS
+# =====================================================
+
+@app.post("/simular-pago")
+def pago_qr(data: dict):
+
+    try:
+
+        print("➡️ POST /simular-pago")
+
+        return simular_pago(data)
+
+    except Exception as e:
+
+        print("❌ Error pago:", e)
+
+        return {
+            "error": str(e)
+        }

@@ -12,16 +12,36 @@ def crear_reserva(data):
     cur = conn.cursor()
 
     # =====================================================
-    # VALIDAR PAGO
+    # VALIDAR PAGO EXISTENTE
     # =====================================================
 
-    if not data.get("pagado"):
+    if not data.get("pago_id"):
 
         conn.close()
 
         return {
             "error":
-            "Debes realizar el pago antes de reservar"
+            "No se encontró un pago válido"
+        }
+
+    cur.execute("""
+        SELECT id
+        FROM pagos
+        WHERE id=%s
+        AND estado='aprobado'
+    """, (
+        data["pago_id"],
+    ))
+
+    pago = cur.fetchone()
+
+    if not pago:
+
+        conn.close()
+
+        return {
+            "error":
+            "El pago no existe o no fue aprobado"
         }
 
     # =====================================================
@@ -97,7 +117,8 @@ def crear_reserva(data):
             pagado,
             jugadores,
             balones,
-            detalles
+            detalles,
+            pago_id
         )
         VALUES
         (
@@ -106,6 +127,7 @@ def crear_reserva(data):
             %s,
             %s,
             'pendiente',
+            %s,
             %s,
             %s,
             %s,
@@ -119,7 +141,8 @@ def crear_reserva(data):
         True,
         data.get("jugadores", 0),
         data.get("balones", 0),
-        data.get("detalles", "")
+        data.get("detalles", ""),
+        data["pago_id"]
     ))
 
     conn.commit()

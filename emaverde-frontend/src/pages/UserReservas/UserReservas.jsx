@@ -315,6 +315,15 @@ function UserReservas({ user }) {
       return;
     }
 
+    if (!form.pago_id) {
+
+      toast.error(
+        "No existe un pago válido"
+      );
+
+      return;
+    }
+
     if (
       !form.fecha
       ||
@@ -367,9 +376,9 @@ function UserReservas({ user }) {
 
           body: JSON.stringify({
             ...form,
-            usuario_correo:
-              user.correo,
-            pagado: true
+            usuario_correo: user.correo,
+            pagado: true,
+            pago_id: form.pago_id
           })
         }
       );
@@ -397,7 +406,11 @@ function UserReservas({ user }) {
       setForm({
         espacio_id:"",
         horario_id:"",
-        fecha:""
+        fecha:"",
+        pago_id:null,
+        jugadores:0,
+        balones:0,
+        detalles:""
       });
 
       cargarReservas();
@@ -826,6 +839,8 @@ function UserReservas({ user }) {
 
       form={form}
       setForm={setForm}
+
+      user={user}
 
       espacios={espacios}
       ubicaciones={ubicaciones}

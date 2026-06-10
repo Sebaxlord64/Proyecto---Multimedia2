@@ -1,3 +1,4 @@
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 import ModelViewer from "../ModelViewer";
@@ -17,6 +18,8 @@ function ReservaPanel({
   pagado,
   setPagado,
 
+  user,
+
   guardar,
 
   hayConflicto,
@@ -32,6 +35,8 @@ function ReservaPanel({
 
 }) {
 
+  const [paso, setPaso] = useState(1);
+
   // =====================================================
   // LOGICA BALONES Y JUGADORES
   // =====================================================
@@ -42,10 +47,6 @@ function ReservaPanel({
   const balones =
     Number(form.balones || 0);
 
-  // =====================================================
-  // MAXIMO BALONES
-  // =====================================================
-
   let maxBalones = 1;
 
   if (
@@ -53,30 +54,18 @@ function ReservaPanel({
     &&
     jugadores <= 20
   ) {
-
     maxBalones = 2;
-
   }
 
   if (jugadores >= 21) {
-
     maxBalones = 3;
-
   }
-
-  // =====================================================
-  // VALIDACIONES
-  // =====================================================
 
   const excedeBalones =
     balones > maxBalones;
 
   const excedeJugadores =
     jugadores > 35;
-
-  // =====================================================
-  // UBICACION CANCHA
-  // =====================================================
 
   const ubicacionSeleccionada =
     ubicaciones?.find(
@@ -85,13 +74,81 @@ function ReservaPanel({
         String(form.espacio_id)
     );
 
+    // =====================================================
+    // PRECIOS SIMULADOS
+    // =====================================================
+
+    const preciosCanchas = {
+
+      1: 20, // Juancito Pinto  
+
+      2: 25, // Juana Azurduy
+
+      3: 30, // Cancha Zapata
+
+      4: 22, // Juanito Pinto 2
+
+      6: 35, // Juan de la Rosa
+
+      7: 40  // Luis Lastra
+
+    };
+
+    const precioCancha =
+      preciosCanchas[form.espacio_id] || 20;
+      const verificarPago = async () => {
+
+  try {
+
+    const res = await fetch(
+      "http://127.0.0.1:8000/simular-pago",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          usuario_correo: user.correo,
+          monto: precioCancha
+        })
+      }
+    );
+
+    const data = await res.json();
+
+    if (data.error) {
+
+      toast.error(data.error);
+
+      return;
+    }
+
+    setForm(prev => ({
+      ...prev,
+      pago_id: data.pago_id
+    }));
+
+    setPagado(true);
+
+    toast.success(
+      `Pago QR aprobado (${data.codigo_pago})`
+    );
+
+  } catch (error) {
+
+    toast.error(
+      "Error al procesar el pago"
+    );
+
+  }
+
+};    
+
   return (
 
     <div className="reserva-layout">
-
-      {/* ===================================================== */}
-      {/* FORMULARIO */}
-      {/* ===================================================== */}
 
       <div className="reserva-form-card">
 
@@ -115,471 +172,561 @@ function ReservaPanel({
 
         </div>
 
-        <div className="form-grid-modern">
+        {/* ===================================== */}
+        {/* STEPPER */}
+        {/* ===================================== */}
 
-          {/* FECHA */}
+        <div className="stepper">
 
-          <div className="form-group-modern">
-
-            <label>
-              Fecha
-            </label>
-
-            <input
-              type="date"
-
-              value={form.fecha}
-
-              onChange={e =>
-                setForm({
-                  ...form,
-                  fecha:e.target.value,
-                  horario_id:""
-                })
-              }
-            />
-
-            {esFechaPasada() && (
-
-              <p className="error-text">
-                ⚠ Fecha inválida
-              </p>
-
-            )}
-
+          <div
+            className={
+              paso >= 1
+                ? "step active"
+                : "step"
+            }
+          >
+            Reserva
           </div>
 
-          {/* CANCHA */}
+          <div
+            className={
+              paso >= 2
+                ? "step active"
+                : "step"
+            }
+          >
+            Datos
+          </div>
 
-          <div className="form-group-modern">
+          <div
+            className={
+              paso >= 3
+                ? "step active"
+                : "step"
+            }
+          >
+            Pago
+          </div>
 
-            <label>
-              Cancha
-            </label>
+        </div>
 
-            <select
-              value={form.espacio_id}
+        {/* ===================================== */}
+        {/* PASO 1 */}
+        {/* ===================================== */}
 
-              onChange={e =>
-                setForm({
-                  ...form,
-                  espacio_id:e.target.value,
-                  horario_id:""
-                })
-              }
-            >
+        {paso === 1 && (
 
-              <option value="">
-                Seleccionar
-              </option>
+          <>
 
-              {espacios.map(e => (
+            <div className="form-grid-modern">
 
-                <option
-                  key={e[0]}
-                  value={e[0]}
+              <div className="form-group-modern">
+
+                <label>
+                  Fecha
+                </label>
+
+                <input
+                  type="date"
+                  value={form.fecha}
+                  onChange={e =>
+                    setForm({
+                      ...form,
+                      fecha:e.target.value,
+                      horario_id:""
+                    })
+                  }
+                />
+
+                {esFechaPasada() && (
+
+                  <p className="error-text">
+                    ⚠ Fecha inválida
+                  </p>
+
+                )}
+
+              </div>
+
+              <div className="form-group-modern">
+
+                <label>
+                  Cancha
+                </label>
+
+                <select
+                  value={form.espacio_id}
+                  onChange={e =>
+                    setForm({
+                      ...form,
+                      espacio_id:e.target.value,
+                      horario_id:""
+                    })
+                  }
                 >
-                  {e[1]}
-                </option>
 
-              ))}
+                  <option value="">
+                    Seleccionar
+                  </option>
 
-            </select>
+                  {espacios.map(e => (
 
-            {form.espacio_id && (
+                    <option
+                      key={e[0]}
+                      value={e[0]}
+                    >
+                      {e[1]}
+                    </option>
 
-              <button
-                type="button"
+                  ))}
 
-                onClick={() => {
+                </select>
 
-                  const espacio =
-                    espacios.find(
-                      e =>
-                        String(e[0]) ===
-                        String(form.espacio_id)
-                    );
+                {form.espacio_id && (
 
-                  if (!espacio?.[10]) {
+                  <button
+                    type="button"
+                    className="btn-preview-3d"
+                    onClick={() => {
 
-                    toast.error(
-                      "Esta cancha no tiene modelo 3D"
-                    );
+                      const espacio =
+                        espacios.find(
+                          e =>
+                            String(e[0]) ===
+                            String(form.espacio_id)
+                        );
 
-                    return;
+                      if (!espacio?.[10]) {
+
+                        toast.error(
+                          "Esta cancha no tiene modelo 3D"
+                        );
+
+                        return;
+                      }
+
+                      setModeloSeleccionado(
+                        espacio[10]
+                      );
+
+                    }}
+                  >
+                    Ver cancha en 3D
+                  </button>
+
+                )}
+
+              </div>
+              {/* HORARIO */}
+
+              <div className="form-group-modern">
+
+                <label>
+                  Horario
+                </label>
+
+                <select
+                  value={form.horario_id}
+
+                  onChange={e =>
+                    setForm({
+                      ...form,
+                      horario_id:e.target.value
+                    })
                   }
 
-                  setModeloSeleccionado(
-                    espacio[10]
-                  );
-
-                  toast.success(
-                    "Cargando vista 3D..."
-                  );
-
-                }}
-
-                className="btn-preview-3d"
-              >
-                Ver cancha en 3D
-              </button>
-
-            )}
-
-          </div>
-
-          {/* HORARIO */}
-
-          <div className="form-group-modern">
-
-            <label>
-              Horario
-            </label>
-
-            <select
-              value={form.horario_id}
-
-              onChange={e =>
-                setForm({
-                  ...form,
-                  horario_id:e.target.value
-                })
-              }
-
-              disabled={
-                !form.espacio_id
-                ||
-                !form.fecha
-              }
-            >
-
-              <option value="">
-                Seleccionar
-              </option>
-
-              {horariosFiltrados.length === 0 && (
-
-                <option disabled>
-                  No disponible
-                </option>
-
-              )}
-
-              {horariosFiltrados.map(h => (
-
-                <option
-                  key={h[0]}
-                  value={h[0]}
+                  disabled={
+                    !form.espacio_id
+                    ||
+                    !form.fecha
+                  }
                 >
-                  {h[3]}
-                  {" | "}
-                  {h[4]}
-                  {" - "}
-                  {h[5]}
-                </option>
 
-              ))}
+                  <option value="">
+                    Seleccionar
+                  </option>
 
-            </select>
+                  {horariosFiltrados.length === 0 && (
 
-            {hayConflicto() && (
+                    <option disabled>
+                      No disponible
+                    </option>
 
-              <p className="error-text">
-                ⚠ Ese horario ya está ocupado
-              </p>
+                  )}
 
-            )}
+                  {horariosFiltrados.map(h => (
 
-          </div>
+                    <option
+                      key={h[0]}
+                      value={h[0]}
+                    >
+                      {h[3]}
+                      {" | "}
+                      {h[4]}
+                      {" - "}
+                      {h[5]}
+                    </option>
 
-          {/* JUGADORES */}
+                  ))}
 
-          <div className="form-group-modern">
+                </select>
 
-            <label>
-              Cantidad de jugadores
-            </label>
+                {hayConflicto() && (
 
-            <input
-              type="number"
+                  <p className="error-text">
+                    ⚠ Ese horario ya está ocupado
+                  </p>
 
-              min="1"
-              max="35"
+                )}
 
-              placeholder="Máximo 35 jugadores"
+              </div>
 
-              value={form.jugadores || ""}
+            </div>
 
-              onChange={e => {
+          <div className="form-actions-modern">
 
-                const valor =
-                  Number(e.target.value);
+            <button
+              className="btn-cancel"
 
-                if (valor <= 35) {
+              onClick={() => {
 
-                  setForm({
-                    ...form,
-                    jugadores: valor
-                  });
+                setPagado(false);
 
-                } else {
+                toast(
+                  "Reserva cancelada"
+                );
 
-                  toast.error(
-                    "Máximo 35 jugadores"
-                  );
-
-                }
+                setVista("lista");
 
               }}
-            />
+            >
+              Cancelar
+            </button>
 
-            <p className="helper-text">
+            <button
+              className="btn-save"
 
-              Máximo permitido:
-              {" "}
+              onClick={() => {
 
-              <strong>
-                35
-              </strong>
-
-              {" "}
-              jugadores
-
-            </p>
-
-            {excedeJugadores && (
-
-              <p className="error-text">
-                ⚠ Máximo permitido:
-                {" "}
-                35 jugadores
-              </p>
-
-            )}
-
-          </div>
-
-          {/* BALONES */}
-
-          <div className="form-group-modern">
-
-            <label>
-
-              Cantidad de balones
-
-              {" "}
-
-              <span className="extra-label">
-                (Tiene costo aparte)
-              </span>
-
-            </label>
-
-            <input
-              type="number"
-
-              min="0"
-              max={maxBalones}
-
-              placeholder={`Máximo ${maxBalones}`}
-
-              value={form.balones || ""}
-
-              onChange={e => {
-
-                const valor =
-                  Number(e.target.value);
-
-                if (valor <= maxBalones) {
-
-                  setForm({
-                    ...form,
-                    balones: valor
-                  });
-
-                } else {
+                if (
+                  !form.fecha
+                  ||
+                  !form.espacio_id
+                  ||
+                  !form.horario_id
+                ) {
 
                   toast.error(
-                    `Máximo ${maxBalones} balón(es)`
+                    "Completa todos los datos"
                   );
 
+                  return;
                 }
 
+                setPaso(2);
+
               }}
-            />
-
-            <p className="helper-text">
-
-              Máximo:
-              {" "}
-
-              <strong>
-                {maxBalones}
-              </strong>
-
-              {" "}
-              balón(es) para
-
-              {" "}
-
-              <strong>
-                {jugadores || 0}
-              </strong>
-
-              {" "}
-              jugadores
-
-            </p>
-
-            {excedeBalones && (
-
-              <p className="error-text">
-                ⚠ Excede el máximo permitido
-              </p>
-
-            )}
+            >
+              Siguiente →
+            </button>
 
           </div>
 
-          {/* DETALLES */}
+          </>
 
-          <div className="form-group-modern full-width">
+        )}
 
-            <label>
-              Detalles extra
-            </label>
+        {/* ===================================== */}
+        {/* PASO 2 */}
+        {/* ===================================== */}
 
-            <textarea
-              rows="4"
+        {paso === 2 && (
 
-              placeholder={`Ejemplo:
+          <>
+
+            <div className="form-grid-modern">
+
+              {/* JUGADORES */}
+
+              <div className="form-group-modern">
+
+                <label>
+                  Cantidad de jugadores
+                </label>
+
+                <input
+                  type="number"
+
+                  min="1"
+                  max="35"
+
+                  placeholder="Máximo 35 jugadores"
+
+                  value={form.jugadores || ""}
+
+                  onChange={e => {
+
+                    const valor =
+                      Number(e.target.value);
+
+                    if (valor <= 35) {
+
+                      setForm({
+                        ...form,
+                        jugadores: valor
+                      });
+
+                    } else {
+
+                      toast.error(
+                        "Máximo 35 jugadores"
+                      );
+
+                    }
+
+                  }}
+                />
+
+                <p className="helper-text">
+
+                  Máximo permitido:
+
+                  {" "}
+
+                  <strong>
+                    35
+                  </strong>
+
+                  {" "}
+
+                  jugadores
+
+                </p>
+
+              </div>
+
+              {/* BALONES */}
+
+              <div className="form-group-modern">
+
+                <label>
+
+                  Cantidad de balones
+
+                  {" "}
+
+                  <span className="extra-label">
+                    (Tiene costo aparte)
+                  </span>
+
+                </label>
+
+                <input
+                  type="number"
+
+                  min="0"
+                  max={maxBalones}
+
+                  placeholder={`Máximo ${maxBalones}`}
+
+                  value={form.balones || ""}
+
+                  onChange={e => {
+
+                    const valor =
+                      Number(e.target.value);
+
+                    if (valor <= maxBalones) {
+
+                      setForm({
+                        ...form,
+                        balones: valor
+                      });
+
+                    } else {
+
+                      toast.error(
+                        `Máximo ${maxBalones} balón(es)`
+                      );
+
+                    }
+
+                  }}
+                />
+
+                <p className="helper-text">
+
+                  Máximo:
+
+                  {" "}
+
+                  <strong>
+                    {maxBalones}
+                  </strong>
+
+                  {" "}
+
+                  balón(es) para
+
+                  {" "}
+
+                  <strong>
+                    {jugadores || 0}
+                  </strong>
+
+                  {" "}
+
+                  jugadores
+
+                </p>
+
+              </div>
+
+              {/* DETALLES */}
+
+              <div className="form-group-modern full-width">
+
+                <label>
+                  Detalles extra
+                </label>
+
+                <textarea
+                  rows="4"
+
+                  placeholder={`Ejemplo:
 - Necesitamos iluminación
 - Conos y platillos
 - Chalecos deportivos`}
 
-              value={form.detalles || ""}
+                  value={form.detalles || ""}
 
-              onChange={e =>
-                setForm({
-                  ...form,
-                  detalles:e.target.value
-                })
-              }
-            />
+                  onChange={e =>
+                    setForm({
+                      ...form,
+                      detalles:e.target.value
+                    })
+                  }
+                />
 
-          </div>
-
-        </div>
-
-        {/* ===================================================== */}
-        {/* PAGO */}
-        {/* ===================================================== */}
-
-        <div className="payment-card">
-
-          <div className="payment-header">
-
-            <div>
-
-              <h3>
-                Pago requerido
-              </h3>
-
-              <p>
-                Escanea el QR para continuar
-              </p>
+              </div>
 
             </div>
 
-            <span>
-              20 Bs
-            </span>
-
-          </div>
-
-          <img
-            src={qrList[qrActual]}
-            alt="QR"
-            className="qr-image"
-          />
-
-          <p className="qr-timer">
-            QR válido por 15 segundos...
-          </p>
-
-          {!pagado ? (
+            <div className="form-actions-modern">
 
             <button
-              className="btn-pay"
-
-              onClick={() => {
-
-                setPagado(true);
-
-                toast.success(
-                  "Pago verificado correctamente"
-                );
-
-              }}
+              className="btn-cancel"
+              onClick={() => setPaso(1)}
             >
-              Verificar pago
+              ← Anterior
             </button>
 
-          ) : (
+              <button
+                className="btn-save"
+                onClick={() => setPaso(3)}
+              >
+                Siguiente →
+              </button>
 
-            <div className="payment-success">
-              Pago realizado correctamente
             </div>
 
-          )}
+          </>
 
-        </div>
+        )}
+                {/* ===================================== */}
+        {/* PASO 3 */}
+        {/* ===================================== */}
 
-        {/* ===================================================== */}
-        {/* BOTONES */}
-        {/* ===================================================== */}
+        {paso === 3 && (
 
-        <div className="form-actions-modern">
+          <>
 
-          <button
-            className="btn-save"
+            <div className="payment-card">
 
-            onClick={guardar}
+              <div className="payment-header">
 
-            disabled={
-              hayConflicto()
-              ||
-              esFechaPasada()
-              ||
-              !pagado
-              ||
-              excedeBalones
-              ||
-              excedeJugadores
-            }
-          >
-            Guardar reserva
-          </button>
+                <div>
 
-          <button
-            className="btn-cancel"
+                  <h3>
+                    Pago requerido
+                  </h3>
 
-            onClick={() => {
+                  <p>
+                    Escanea el QR para continuar
+                  </p>
 
-              setPagado(false);
+                </div>
 
-              toast(
-                "Reserva cancelada"
-              );
+                <span>
+                  {precioCancha} Bs
+                </span>
 
-              setVista("lista");
+              </div>
 
-            }}
-          >
-            Cancelar
-          </button>
+              <img
+                src={qrList[qrActual]}
+                alt="QR"
+                className="qr-image"
+              />
 
-        </div>
+              <p className="qr-timer">
+                QR válido por 15 segundos...
+              </p>
+
+              {!pagado ? (
+
+                <button
+                  className="btn-pay"
+
+                  onClick={verificarPago}
+                >
+                  Verificar pago
+                </button>
+
+              ) : (
+
+                <div className="payment-success">
+                  Pago realizado correctamente
+                </div>
+
+              )}
+
+            </div>
+
+            <div className="form-actions-modern">
+
+            <button
+              className="btn-cancel"
+              onClick={() => setPaso(2)}
+            >
+              ← Anterior
+            </button>
+
+              <button
+                className="btn-save"
+
+                onClick={guardar}
+
+                disabled={
+                  hayConflicto()
+                  ||
+                  esFechaPasada()
+                  ||
+                  !pagado
+                  ||
+                  excedeBalones
+                  ||
+                  excedeJugadores
+                }
+              >
+                Guardar reserva
+              </button>
+
+            </div>
+
+          </>
+
+        )}
 
       </div>
 
@@ -679,6 +826,7 @@ function ReservaPanel({
             />
 
             <button
+
               onClick={() => {
 
                 setModeloSeleccionado(null);
@@ -703,6 +851,7 @@ function ReservaPanel({
     </div>
 
   );
+
 }
 
-export default ReservaPanel;
+export default ReservaPanel;              

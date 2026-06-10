@@ -7,7 +7,7 @@
   grid-template-columns: 1.1fr .9fr;
   gap: 28px;
   align-items: start;
-}
+} 
 
 .reserva-form-card{
   background: white;
@@ -418,4 +418,77 @@
   color: #64748b;
 
   line-height: 1.4;
+}
+/* ========================================= */
+/* WIZARD RESERVAS */
+/* ========================================= */
+
+.stepper{
+  display:flex;
+  gap:14px;
+  margin-bottom:28px;
+}
+
+.step{
+  flex:1;
+
+  text-align:center;
+
+  padding:14px;
+
+  border-radius:14px;
+
+  background:#e2e8f0;
+
+  color:#64748b;
+
+  font-size:14px;
+  font-weight:700;
+
+  transition:.3s;
+
+  border:1px solid #cbd5e1;
+}
+
+.step.active{
+  background:#1f8b3e;
+  color:white;
+
+  border-color:#1f8b3e;
+
+  box-shadow:
+    0 8px 20px rgba(31,139,62,.18);
+}
+
+/* indicador de paso */
+
+.step::before{
+  content:"✓";
+  margin-right:8px;
+  opacity:.5;
+}
+
+.step.active::before{
+  opacity:1;
+}
+
+/* animación suave */
+
+.payment-card,
+.form-grid-modern{
+  animation:fadeWizard .25s ease;
+}
+
+@keyframes fadeWizard{
+
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+
 }
